@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projeto IFSC</title>
+  <style>
+    :root {
+      --bg: #f0f4f8;
+      --card: #fff;
+      --text: #1e293b;
+      --primary: #2563eb;
+      --secondary: #0ea5e9;
+      --danger: #dc2626;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: #0f172a;
+    }
+
+    header {
+      background: linear-gradient(130deg, var(--primary), var(--secondary));
+      color: #fff;
+      padding: 18px 22px;
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, .18);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.67rem;
+      letter-spacing: 0.02em;
+    }
+
+    nav {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    nav a,
+    .nav-button {
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid rgba(255, 255, 255, .38);
+      color: white;
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 9px;
+      font-weight: 700;
+      transition: transform .2s ease, background .2s ease;
+      cursor: pointer;
+    }
+
+    nav a:hover,
+    .nav-button:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.38);
+    }
+
+    main {
+      padding: 26px 24px 38px;
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      box-shadow: 0 12px 34px rgba(30, 41, 59, 0.12);
+      margin-bottom: 18px;
+      padding: 22px;
+      border: 1px solid #e2e8f0;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 42px rgba(30, 41, 59, 0.20);
+      border-color: #a5b4fc;
+    }
+
+    .card h2 {
+      position: relative;
+      margin-top: 0;
+    }
+
+    .card h2::after {
+      content: '';
+      width: 48px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      display: block;
+      margin-top: 8px;
+      border-radius: 8px;
+    }
+
+    .card ul {
+      padding-left: 20px;
+    }
+
+    .card li {
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+
+    .card strong {
+      color: #1d4ed8;
+    }
+
+    .card p {
+      font-size: 1rem;
+      color: #334155;
+    }
+
+    #aboutSection p {
+      font-size: 1.1rem;
+      color: #7f72c2;
+      line-height: 1.6;
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      transition: border-color .2s ease, box-shadow .2s ease;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18);
+    }
+
+    button {
+      padding: 11px 16px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+      transition: filter .2s ease, transform .2s ease;
+      font-family: inherit;
+    }
+
+    button:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    button.secondary {
+      background: var(--secondary);
+    }
+
+    button.danger {
+      background: var(--danger);
+    }
+
+    .alert {
+      border-left: 4px solid var(--primary);
+      background: #e8f0ff;
+      padding: 10px;
+      margin-bottom: 16px;
+      border-radius: 7px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.86rem;
+      margin-top: 20px;
+      color: #64748b;
+    }
+
+    .profile-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .profile-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .profile-list button {
+      margin-left: 6px;
+      padding: 7px 9px;
+      font-size: 0.82rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+    }
+
+    .task-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .task-item {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .task-item strong {
+      color: #0f172a;
+    }
+
+    .task-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .task-actions button {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: #e2e8f0;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .task-actions button:hover {
+      background: #dbeafe;
+    }
+
+    .task-actions button.edit {
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+
+    .task-actions button.delete {
+      border-color: #dc2626;
+      color: #dc2626;
+    }
+
+    .tab-btn {
+      background: #e2e8f0;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      transition: background .2s ease, transform .2s ease;
+    }
+
+    .tab-btn:hover {
+      background: #dbeafe;
+      transform: translateY(-1px);
+    }
+
+    .tab-btn.active {
+      background: #fff;
+      color: #2563eb;
+      border-color: #2563eb;
+      box-shadow: inset 0 -2px 0 #2563eb;
+    }
+
+    .tab-panel {
+      margin-top: 14px;
+    }
+
+    /* ── Alert de prazo expirado ── */
+    #expiredOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #expiredOverlay.show {
+      display: flex;
+    }
+
+    #expiredBox {
+      background: #fff;
+      border-radius: 16px;
+      border-top: 6px solid #dc2626;
+      padding: 28px 32px;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+      animation: popIn .25s ease;
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(.88);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    #expiredBox h3 {
+      margin: 0 0 8px;
+      color: #dc2626;
+      font-size: 1.2rem;
+    }
+
+    #expiredBox ul {
+      margin: 12px 0 20px;
+      padding-left: 18px;
+      color: #1e293b;
+    }
+
+    #expiredBox ul li {
+      margin-bottom: 6px;
+      line-height: 1.6;
+    }
+
+    #expiredBox button {
+      background: #dc2626;
+      color: #fff;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 22px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #expiredBox button:hover {
+      filter: brightness(1.08);
+    }
+
+    @media(max-width:900px) {
+      main {
+        padding: 20px 16px 30px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+    }
+
+    @media(max-width:700px) {
+      header h1 {
+        font-size: 1.15rem;
+      }
+
+      nav {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Alert de prazo expirado -->
+  <div id="expiredOverlay">
+    <div id="expiredBox">
+      <h3>&#9888; Prazo expirado!</h3>
+      <p style="color:#334155; margin:0;">As seguintes tarefas já passaram do prazo:</p>
+      <ul id="expiredList"></ul>
+      <button onclick="document.getElementById('expiredOverlay').classList.remove('show')">Fechar</button>
+    </div>
+  </div>
+
+  <header>
+    <h1>Projeto IFSC</h1>
+    <nav id="navBar">
+      <a href="#taskSection" class="nav-button">Tarefas</a>
+      <a href="#notificationsSection" class="nav-button">Notificações</a>
+      <button id="btnProfile" class="nav-button">Perfil</button>
+      <button id="btnAbout" class="nav-button">Sobre</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="authSection" class="card">
+      <h2>Autenticação</h2>
+      <div id="authTabs" style="display:flex; gap:8px; margin-bottom:14px;">
+        <button class="tab-btn active" data-tab="cadastroPanel">Cadastrar</button>
+        <button class="tab-btn" data-tab="loginPanel">Login</button>
+        <button class="tab-btn" data-tab="contaPanel">Minha Conta</button>
+      </div>
+      <div id="authMessage" class="alert">Faça login para gerenciar suas tarefas acadêmicas.</div>
+      <div id="contentControls" style="margin-top:12px;">
+        <button id="btnAccessContent" class="secondary hidden">Acessar minhas tarefas</button>
+      </div>
+
+      <div id="cadastroPanel" class="tab-panel">
+        <h3>Cadastrar Conta</h3>
+        <div class="form-group"><label for="signName">Nome</label><input id="signName" type="text"
+            placeholder="Seu nome"></div>
+        <div class="form-group"><label for="signEmail">E-mail</label><input id="signEmail" type="email"
+            placeholder="email@exemplo.com"></div>
+        <div class="form-group"><label for="signPass">Senha</label><input id="signPass" type="password"
+            placeholder="******"></div>
+        <button id="btnSignUp">Cadastrar</button>
+      </div>
+
+      <div id="loginPanel" class="tab-panel hidden">
+        <h3>Login</h3>
+        <div class="form-group"><label for="loginEmail">E-mail</label><input id="loginEmail" type="email"
+            placeholder="email@exemplo.com"></div>
+        <div class="form-group"><label for="loginPass">Senha</label><input id="loginPass" type="password"
+            placeholder="******"></div>
+        <button id="btnLogin">Entrar</button>
+      </div>
+
+      <div id="contaPanel" class="tab-panel hidden">
+        <h3>Minha Conta</h3>
+        <p>Logado como: <strong id="currentUser">Usuário</strong></p>
+        <p>Contas registradas:</p>
+        <ul id="accounts" class="profile-list"></ul>
+      </div>
+    </section>
+
+    <section id="profileSection" class="card hidden">
+      <h2>Perfil</h2>
+      <div id="profileSummary" style="margin-bottom:12px;">
+        <p><strong>Usuário ativo:</strong> <span id="profileUser">--</span></p>
+        <p><strong>Nome:</strong> <span id="profileName">--</span></p>
+        <p><strong>E-mail:</strong> <span id="profileEmail">--</span></p>
+        <p><strong>Total de contas:</strong> <span id="profileCount">0</span></p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button id="btnAddAccount" class="secondary">Nova conta</button>
+        <button id="btnLogout" class="danger">Sair</button>
+        <button id="btnBackToContent" class="secondary">Voltar</button>
+      </div>
+    </section>
+
+    <section id="taskSection" class="card hidden">
+      <h2>Lista de Tarefas</h2>
+      <div id="taskAlert" class="alert hidden"></div>
+      <button id="btnNewTask" class="secondary">Cadastrar nova tarefa</button>
+      <div id="taskForm" class="card hidden" style="margin-top:16px;">
+        <h3>Cadastro/Edição de tarefa</h3>
+        <div class="form-group"><label for="taskTitle">Título</label><input id="taskTitle" type="text"
+            placeholder="Ex: Estudar para a prova"></div>
+        <div class="form-group"><label for="taskDescription">Descrição</label><textarea id="taskDescription"
+            placeholder="Descreva a tarefa"></textarea></div>
+        <div class="form-group"><label for="taskDeadline">Prazo</label><input id="taskDeadline" type="datetime-local">
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;"><button id="btnSaveTask">Salvar tarefa</button><button
+            id="btnCancelTask" class="secondary">Cancelar</button></div>
+      </div>
+      <div id="taskListContainer" style="margin-top:18px;">
+        <h3>Suas tarefas</h3>
+        <ul id="taskList" class="task-list"></ul>
+      </div>
+    </section>
+
+    <section id="notificationsSection" class="card hidden">
+      <h2>Notificações</h2>
+      <p>O Projeto IFSC exibe lembretes antes do prazo das tarefas cadastradas.</p>
+      <ul id="reminderList" class="task-list"></ul>
+    </section>
+
+    <section id="aboutSection" class="card hidden">
+      <h2>Sobre</h2>
+      <p>Projeto IFSC foi criado para ajudar estudantes universitários e professores a organizar tarefas, prazos e
+        atividades acadêmicas.</p>
+      <ul>
+        <li>Cadastro de usuário com e-mail e senha.</li>
+        <li>Login seguro e fácil de usar.</li>
+        <li>Gerenciamento de tarefas com título, descrição e prazo.</li>
+        <li>Edição e exclusão de tarefas em poucos cliques.</li>
+        <li>Lembretes automáticos antes do vencimento.</li>
+      </ul>
+      <p>Esta versão funciona inteiramente no navegador usando HTML, CSS e JavaScript com armazenamento local.</p>
+      <button id="btnBackFromAbout" class="secondary">Voltar</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>Projeto IFSC - Organização acadêmica simples e acessível.</p>
+  </footer>
+
+  <script>
+    const storageKey = 'taskflowProfiles';
+    const authStateKey = 'taskflowAuth';
+    const tasksKey = 'taskflowTasks';
+
+    const signName = document.getElementById('signName');
+    const signEmail = document.getElementById('signEmail');
+    const signPass = document.getElementById('signPass');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPass = document.getElementById('loginPass');
+
+    const btnSignUp = document.getElementById('btnSignUp');
+    const btnLogin = document.getElementById('btnLogin');
+    const btnLogout = document.getElementById('btnLogout');
+    const btnProfile = document.getElementById('btnProfile');
+    const btnAbout = document.getElementById('btnAbout');
+    const btnAccessContent = document.getElementById('btnAccessContent');
+    const btnBackToContent = document.getElementById('btnBackToContent');
+    const btnAddAccount = document.getElementById('btnAddAccount');
+    const btnNewTask = document.getElementById('btnNewTask');
+    const btnSaveTask = document.getElementById('btnSaveTask');
+    const btnCancelTask = document.getElementById('btnCancelTask');
+    const btnBackFromAbout = document.getElementById('btnBackFromAbout');
+
+    const authMessage = document.getElementById('authMessage');
+    const accountsList = document.getElementById('accounts');
+    const authSection = document.getElementById('authSection');
+    const profileSection = document.getElementById('profileSection');
+    const aboutSection = document.getElementById('aboutSection');
+    const taskSection = document.getElementById('taskSection');
+    const notificationsSection = document.getElementById('notificationsSection');
+    const currentUserSpan = document.getElementById('currentUser');
+    const profileName = document.getElementById('profileName');
+    const profileEmail = document.getElementById('profileEmail');
+    const profileCount = document.getElementById('profileCount');
+    const taskForm = document.getElementById('taskForm');
+    const taskTitle = document.getElementById('taskTitle');
+    const taskDescription = document.getElementById('taskDescription');
+    const taskDeadline = document.getElementById('taskDeadline');
+    const taskList = document.getElementById('taskList');
+    const reminderList = document.getElementById('reminderList');
+    const taskAlert = document.getElementById('taskAlert');
+    const navBar = document.getElementById('navBar');
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    let currentEditingId = null;
+    // Rastreia IDs de tarefas cujo alerta já foi exibido nesta sessão
+    const alertedExpired = new Set();
+
+    function loadProfiles() { const data = localStorage.getItem(storageKey); return data ? JSON.parse(data) : []; }
+    function saveProfiles(profiles) { localStorage.setItem(storageKey, JSON.stringify(profiles)); }
+    function loadTasks() { const data = localStorage.getItem(tasksKey); return data ? JSON.parse(data) : []; }
+    function saveTasks(tasks) { localStorage.setItem(tasksKey, JSON.stringify(tasks)); }
+
+    function setAuthenticated(user) { localStorage.setItem(authStateKey, JSON.stringify({ user, date: new Date().toISOString() })); updateUI(); }
+    function getAuthenticated() { const raw = localStorage.getItem(authStateKey); return raw ? JSON.parse(raw) : null; }
+
+    function setContentVisibility(show) { const sections = document.querySelectorAll('#taskSection, #notificationsSection'); sections.forEach(section => section.classList.toggle('hidden', !show)); navBar.classList.toggle('hidden', !show); }
+    function setActiveTab(tabId) { tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId)); tabPanels.forEach(panel => panel.classList.toggle('hidden', panel.id !== tabId)); }
+
+    function updateProfileSummary() {
+      const auth = getAuthenticated(); const profiles = loadProfiles();
+      if (auth && auth.user) { const profile = profiles.find(p => p.email === auth.user); if (profile) { currentUserSpan.textContent = profile.email; profileName.textContent = profile.name; profileEmail.textContent = profile.email; profileCount.textContent = profiles.length; return; } }
+      currentUserSpan.textContent = 'Usuário'; profileName.textContent = '--'; profileEmail.textContent = '--'; profileCount.textContent = profiles.length;
+    }
+
+    function renderAccounts() {
+      const profiles = loadProfiles(); accountsList.innerHTML = ''; profiles.forEach(profile => {
+        const li = document.createElement('li');
+        const span = document.createElement('span'); span.textContent = profile.email; li.appendChild(span);
+        const buttons = document.createElement('div'); buttons.style.display = 'flex'; buttons.style.gap = '6px';
+        const selectBtn = document.createElement('button'); selectBtn.textContent = 'Selecionar';
+        selectBtn.onclick = () => { const profilePass = prompt('Digite a senha de ' + profile.email + ':'); if (profilePass === profile.pass) { setAuthenticated(profile.email); alert('Conta ' + profile.email + ' ativada.'); } else { alert('Senha incorreta.'); } };
+        const deleteBtn = document.createElement('button'); deleteBtn.textContent = 'Deletar'; deleteBtn.onclick = () => { if (confirm(`Deletar a conta ${profile.email}?`)) { const newProfiles = profiles.filter(p => p.email !== profile.email); saveProfiles(newProfiles); updateUI(); } };
+        buttons.appendChild(selectBtn); buttons.appendChild(deleteBtn); li.appendChild(buttons); accountsList.appendChild(li);
+      });
+    }
+
+    function formatDate(iso) { const date = new Date(iso); if (isNaN(date)) return '--'; return date.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+
+    // ── Verifica e exibe alert de tarefas expiradas ──
+    function checkExpiredTasks() {
+      const auth = getAuthenticated();
+      if (!auth) return;
+      const now = new Date();
+      const tasks = loadTasks().filter(t => t.email === auth.user);
+      const newlyExpired = tasks.filter(t => new Date(t.deadline) < now && !alertedExpired.has(t.id));
+      if (!newlyExpired.length) return;
+
+      newlyExpired.forEach(t => alertedExpired.add(t.id));
+
+      const expiredList = document.getElementById('expiredList');
+      expiredList.innerHTML = '';
+      newlyExpired.forEach(t => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${t.title}</strong> — prazo era ${formatDate(t.deadline)}`;
+        expiredList.appendChild(li);
+      });
+      document.getElementById('expiredOverlay').classList.add('show');
+    }
+
+    function renderTasks() {
+      const tasks = loadTasks(); const auth = getAuthenticated(); taskList.innerHTML = ''; if (!auth) return;
+      const filtered = tasks.filter(t => t.email === auth.user).sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+      if (!filtered.length) { taskList.innerHTML = '<li>Nenhuma tarefa cadastrada.</li>'; return; }
+      const now = new Date();
+      filtered.forEach(task => {
+        const expired = new Date(task.deadline) < now;
+        const li = document.createElement('li'); li.className = 'task-item';
+        if (expired) li.style.borderLeft = '4px solid #dc2626';
+        li.innerHTML = `<div><strong>${task.title}</strong>${expired ? ' <span style="color:#dc2626;font-size:0.85rem;">(Expirado)</span>' : ''}</div>
+            <div>${task.description}</div>
+            <div><strong>Prazo:</strong> ${formatDate(task.deadline)}</div>`;
+        const actions = document.createElement('div'); actions.className = 'task-actions';
+        const editBtn = document.createElement('button'); editBtn.textContent = 'Editar'; editBtn.className = 'edit'; editBtn.onclick = () => openTaskForm(task.id);
+        const deleteBtn = document.createElement('button'); deleteBtn.textContent = 'Excluir'; deleteBtn.className = 'delete'; deleteBtn.onclick = () => deleteTask(task.id);
+        actions.appendChild(editBtn); actions.appendChild(deleteBtn); li.appendChild(actions); taskList.appendChild(li);
+      });
+    }
+
+    function updateReminders() {
+      const tasks = loadTasks(); const auth = getAuthenticated(); reminderList.innerHTML = ''; taskAlert.classList.add('hidden'); if (!auth) return;
+      const now = new Date(); const soon = tasks.filter(t => t.email === auth.user).map(task => ({ ...task, diff: new Date(task.deadline) - now })).filter(t => t.diff >= 0 && t.diff <= 24 * 60 * 60 * 1000);
+      if (!soon.length) { reminderList.innerHTML = '<li>Sem lembretes imediatos.</li>'; return; }
+      soon.sort((a, b) => a.diff - b.diff).forEach(task => {
+        const li = document.createElement('li'); li.className = 'task-item'; li.innerHTML = `<div><strong>${task.title}</strong></div><div>Vence em cerca de ${Math.floor(task.diff / 3600000)}h ${Math.floor((task.diff % 3600000) / 60000)}m</div><div><strong>Prazo:</strong> ${formatDate(task.deadline)}</div>`;
+        reminderList.appendChild(li);
+      });
+      if (soon.length) { taskAlert.textContent = 'Lembrete: há tarefas com prazo nas próximas 24 horas.'; taskAlert.classList.remove('hidden'); }
+    }
+
+    function updateUI() {
+      const auth = getAuthenticated(); renderAccounts(); updateProfileSummary(); renderTasks(); updateReminders();
+      if (auth && auth.user) { authMessage.textContent = `Logado como ${auth.user}`; btnAccessContent.classList.remove('hidden'); profileSection.classList.add('hidden'); aboutSection.classList.add('hidden'); authSection.classList.remove('hidden'); setActiveTab('contaPanel'); setContentVisibility(false); btnProfile.style.display = 'inline-block'; checkExpiredTasks(); }
+      else { localStorage.removeItem(authStateKey); authMessage.textContent = 'Faça login ou cadastre-se para acessar o Projeto IFSC.'; btnAccessContent.classList.add('hidden'); profileSection.classList.add('hidden'); aboutSection.classList.add('hidden'); authSection.classList.remove('hidden'); setActiveTab('loginPanel'); setContentVisibility(false); btnProfile.style.display = 'none'; taskForm.classList.add('hidden'); }
+    }
+
+    function openTaskForm(id) {
+      const tasks = loadTasks(); if (id) { const task = tasks.find(t => t.id === id); if (task) { currentEditingId = id; taskTitle.value = task.title; taskDescription.value = task.description; taskDeadline.value = task.deadline; } } else { currentEditingId = null; taskTitle.value = ''; taskDescription.value = ''; taskDeadline.value = ''; }
+      taskForm.classList.remove('hidden'); taskTitle.focus();
+    }
+
+    function closeTaskForm() { taskForm.classList.add('hidden'); currentEditingId = null; taskTitle.value = ''; taskDescription.value = ''; taskDeadline.value = ''; }
+
+    function deleteTask(id) { if (!confirm('Deseja excluir esta tarefa?')) return; const tasks = loadTasks().filter(task => task.id !== id); saveTasks(tasks); renderTasks(); updateReminders(); }
+
+    btnSignUp.onclick = () => {
+      const name = signName.value.trim(); const email = signEmail.value.trim().toLowerCase(); const pass = signPass.value;
+      if (!name || !email || !pass) { alert('Preencha todos os campos de cadastro.'); return; }
+      const profiles = loadProfiles(); if (profiles.some(p => p.email === email)) { alert('E-mail já cadastrado.'); return; }
+      profiles.push({ name, email, pass }); saveProfiles(profiles); signName.value = ''; signEmail.value = ''; signPass.value = ''; setAuthenticated(email); alert('Cadastro concluído.');
+    };
+
+    btnLogin.onclick = () => {
+      const email = loginEmail.value.trim().toLowerCase(); const pass = loginPass.value;
+      if (!email || !pass) { alert('Preencha e-mail e senha.'); return; }
+      const profiles = loadProfiles(); const match = profiles.find(p => p.email === email && p.pass === pass);
+      if (!match) { alert('E-mail ou senha incorretos.'); return; }
+      loginEmail.value = ''; loginPass.value = ''; setAuthenticated(email); alert('Login realizado. Clique em Acessar minhas tarefas.');
+    };
+
+    btnLogout.onclick = () => { clearAuth(); alert('Você saiu.'); };
+
+    btnProfile.onclick = () => { updateProfileSummary(); profileSection.classList.remove('hidden'); aboutSection.classList.add('hidden'); setContentVisibility(false); authSection.classList.add('hidden'); btnProfile.style.display = 'none'; btnBackToContent.classList.remove('hidden'); };
+
+    btnAbout.onclick = () => { profileSection.classList.add('hidden'); aboutSection.classList.remove('hidden'); setContentVisibility(false); authSection.classList.add('hidden'); btnProfile.style.display = 'none'; btnBackToContent.classList.remove('hidden'); };
+
+    btnAccessContent.onclick = () => { authSection.classList.add('hidden'); profileSection.classList.add('hidden'); aboutSection.classList.add('hidden'); setContentVisibility(true); btnProfile.style.display = 'inline-block'; btnAccessContent.classList.add('hidden'); btnBackToContent.classList.add('hidden'); openTaskForm(); checkExpiredTasks(); window.scrollTo({ top: document.getElementById('taskSection').offsetTop - 60, behavior: 'smooth' }); };
+
+    btnBackToContent.onclick = () => { profileSection.classList.add('hidden'); aboutSection.classList.add('hidden'); setContentVisibility(true); btnProfile.style.display = 'inline-block'; btnBackToContent.classList.add('hidden'); navBar.classList.remove('hidden'); window.scrollTo({ top: document.getElementById('taskSection').offsetTop - 60, behavior: 'smooth' }); };
+
+    btnAddAccount.onclick = () => { profileSection.classList.add('hidden'); authSection.classList.remove('hidden'); setActiveTab('cadastroPanel'); btnAccessContent.classList.remove('hidden'); btnProfile.style.display = 'none'; setContentVisibility(false); };
+
+    btnNewTask.onclick = () => { openTaskForm(); };
+    btnCancelTask.onclick = () => { closeTaskForm(); };
+
+    btnSaveTask.onclick = () => {
+      const title = taskTitle.value.trim(); const description = taskDescription.value.trim(); const deadline = taskDeadline.value;
+      if (!title || !description || !deadline) { alert('Preencha título, descrição e prazo.'); return; }
+      const tasks = loadTasks();
+      if (currentEditingId) { const index = tasks.findIndex(t => t.id === currentEditingId); if (index >= 0) { tasks[index] = { ...tasks[index], title, description, deadline }; } }
+      else { tasks.push({ id: Date.now().toString(), email: getAuthenticated().user, title, description, deadline }); }
+      saveTasks(tasks); renderTasks(); updateReminders(); closeTaskForm();
+      // Verifica imediatamente se a nova tarefa já expirou
+      checkExpiredTasks();
+    };
+
+    btnBackFromAbout.onclick = () => { aboutSection.classList.add('hidden'); setContentVisibility(true); btnProfile.style.display = 'inline-block'; btnBackToContent.classList.add('hidden'); navBar.classList.remove('hidden'); window.scrollTo({ top: document.getElementById('taskSection').offsetTop - 60, behavior: 'smooth' }); };
+
+    function clearAuth() { localStorage.removeItem(authStateKey); updateUI(); }
+
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+    navLinks.forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); const targetId = link.getAttribute('href').substring(1); const targetSection = document.getElementById(targetId); if (targetSection) { setContentVisibility(true); navBar.classList.remove('hidden'); const header = document.querySelector('header'); const offset = header ? header.offsetHeight + 12 : 0; const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - offset; window.scrollTo({ top: targetPosition, behavior: 'smooth' }); } }); });
+
+    tabButtons.forEach(btn => btn.addEventListener('click', () => setActiveTab(btn.dataset.tab)));
+    window.addEventListener('DOMContentLoaded', updateUI);
+
+    // Verifica expiração a cada 60 segundos enquanto o usuário estiver na página
+    setInterval(() => {
+      const auth = getAuthenticated();
+      if (auth) { renderTasks(); checkExpiredTasks(); }
+    }, 60000);
+  </script>
+</body>
+
+</html>
