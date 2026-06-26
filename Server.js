@@ -36,13 +36,14 @@ app.post('/api/register', async (req, res) => {
   if (!name || !email || !password) return res.status(400).json({ error: 'Preencha todos os campos.' });
   const hash = await bcrypt.hash(password, 12);
   try {
-    const [result] = await pool.execute(
+    await pool.execute(
       'INSERT INTO profiles (name, email, password_hash) VALUES (?, ?, ?)',
       [name, email, hash]
     );
-    req.session.profileId = result.insertId;
+    const [[profile]] = await pool.execute('SELECT * FROM profiles WHERE email = ?', [email]);
+    req.session.profileId = profile.id;
     req.session.email = email;
-    res.json({ message: 'Cadastro realizado.' });
+    res.json({ message: 'Cadastro realizado.', name: name, email: email });
   } catch (err) {
     if (err.code === 'ER_DUP_ENTRY') return res.status(409).json({ error: 'E-mail já cadastrado.' });
     res.status(500).json({ error: 'Erro interno.' });
@@ -71,6 +72,19 @@ app.post('/api/logout', auth, async (req, res) => {
   res.json({ message: 'Sessão encerrada.' });
 });
 
+app.get('/api/tasks/expired', auth, async (req, res) => {
+  const [tasks] = await pool.execute(
+    'SELECT * FROM tasks WHERE profile_id = ? AND expired = 1 ORDER BY deadline DESC',
+    [req.session.profileId]
+  );
+  res.json(tasks);
+});
+
+app.post('/api/tasks/check-expired', auth, async (req, res) => {
+  await pool.execute('CALL sp_check_expired_tasks()');
+  res.json({ message: 'Tarefas expiradas atualizadas.' });
+});
+
 app.get('/api/tasks', auth, async (req, res) => {
   const [tasks] = await pool.execute(
     'SELECT * FROM tasks WHERE profile_id = ? ORDER BY deadline ASC',
@@ -82,12 +96,19 @@ app.get('/api/tasks', auth, async (req, res) => {
 app.post('/api/tasks', auth, async (req, res) => {
   const { title, description, deadline } = req.body;
   if (!title || !description || !deadline) return res.status(400).json({ error: 'Preencha todos os campos.' });
-  const [result] = await pool.execute(
-    'INSERT INTO tasks (profile_id, title, description, deadline) VALUES (?, ?, ?, ?)',
-    [req.session.profileId, title, description, deadline]
-  );
-  const [[task]] = await pool.execute('SELECT * FROM tasks WHERE id = ?', [result.insertId]);
-  res.status(201).json(task);
+  try {
+    await pool.execute(
+      'INSERT INTO tasks (profile_id, title, description, deadline) VALUES (?, ?, ?, ?)',
+      [req.session.profileId, title, description, deadline]
+    );
+    const [[task]] = await pool.execute(
+      'SELECT * FROM tasks WHERE profile_id = ? ORDER BY created_at DESC LIMIT 1',
+      [req.session.profileId]
+    );
+    res.status(201).json(task);
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao criar tarefa.' });
+  }
 });
 
 app.put('/api/tasks/:id', auth, async (req, res) => {
@@ -108,19 +129,6 @@ app.delete('/api/tasks/:id', auth, async (req, res) => {
   );
   if (result.affectedRows === 0) return res.status(404).json({ error: 'Tarefa não encontrada.' });
   res.json({ message: 'Tarefa excluída.' });
-});
-
-app.get('/api/tasks/expired', auth, async (req, res) => {
-  const [tasks] = await pool.execute(
-    'SELECT * FROM tasks WHERE profile_id = ? AND expired = 1 ORDER BY deadline DESC',
-    [req.session.profileId]
-  );
-  res.json(tasks);
-});
-
-app.post('/api/tasks/check-expired', auth, async (req, res) => {
-  await pool.execute('CALL sp_check_expired_tasks()');
-  res.json({ message: 'Tarefas expiradas atualizadas.' });
 });
 
 const PORT = process.env.PORT || 3000;

@@ -574,7 +574,6 @@
     const tabPanels = document.querySelectorAll('.tab-panel');
 
     let currentEditingId = null;
-    // Rastreia IDs de tarefas cujo alerta já foi exibido nesta sessão
     const alertedExpired = new Set();
 
     function loadProfiles() { const data = localStorage.getItem(storageKey); return data ? JSON.parse(data) : []; }
@@ -608,7 +607,6 @@
 
     function formatDate(iso) { const date = new Date(iso); if (isNaN(date)) return '--'; return date.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
 
-    // ── Verifica e exibe alert de tarefas expiradas ──
     function checkExpiredTasks() {
       const auth = getAuthenticated();
       if (!auth) return;
@@ -711,7 +709,6 @@
       if (currentEditingId) { const index = tasks.findIndex(t => t.id === currentEditingId); if (index >= 0) { tasks[index] = { ...tasks[index], title, description, deadline }; } }
       else { tasks.push({ id: Date.now().toString(), email: getAuthenticated().user, title, description, deadline }); }
       saveTasks(tasks); renderTasks(); updateReminders(); closeTaskForm();
-      // Verifica imediatamente se a nova tarefa já expirou
       checkExpiredTasks();
     };
 
@@ -725,7 +722,6 @@
     tabButtons.forEach(btn => btn.addEventListener('click', () => setActiveTab(btn.dataset.tab)));
     window.addEventListener('DOMContentLoaded', updateUI);
 
-    // Verifica expiração a cada 60 segundos enquanto o usuário estiver na página
     setInterval(() => {
       const auth = getAuthenticated();
       if (auth) { renderTasks(); checkExpiredTasks(); }
